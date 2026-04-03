@@ -3,8 +3,9 @@ import google.generativeai as genai
 from pypdf import PdfReader
 from fpdf import FPDF
 
-# 1. Configuración de la IA
-genai.configure(api_key="AIzaSyB18bV4J-HVmWr6iiT7SRszeTBXnKExUs8")
+# Ahora el código buscará la llave en los "Secrets" de la web, no aquí
+api_key = st.secrets["AIzaSyB18bV4J-HVmWr6iiT7SRszeTBXnKExUs8"]
+genai.configure(api_key=api_key)
 
 
 def leer_pdf(file):

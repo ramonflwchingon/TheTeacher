@@ -22,9 +22,17 @@ def crear_pdf(texto, titulo):
     pdf.cell(0, 10, txt=titulo, ln=True, align='C')
     pdf.ln(10)
     pdf.set_font("Arial", size=12)
+
+    # Esta línea es la que arregla el error de internet:
     texto_limpio = texto.encode('latin-1', 'ignore').decode('latin-1')
+
     pdf.multi_cell(0, 10, txt=texto_limpio)
-    return pdf.output(dest='S').encode('latin-1')
+
+    # Cambiamos esto para que no dé el error de 'bytearray'
+    pdf_output = pdf.output(dest='S')
+    if isinstance(pdf_output, bytearray):
+        return bytes(pdf_output)
+    return pdf_output
 
 
 # --- DISEÑO THE TEACHER ---

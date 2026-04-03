@@ -4,7 +4,7 @@ from pypdf import PdfReader
 from fpdf import FPDF
 
 # Ahora el código buscará la llave en los "Secrets" de la web, no aquí
-api_key = st.secrets["AIzaSyB18bV4J-HVmWr6iiT7SRszeTBXnKExUs8"]
+api_key = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=api_key)
 
 

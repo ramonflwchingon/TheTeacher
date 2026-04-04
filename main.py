@@ -17,6 +17,8 @@ def leer_pdf(file):
 
 
 def crear_pdf(texto, titulo):
+    if not texto:
+        texto = "No se pudo generar contenido."
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", 'B', 16)
@@ -65,7 +67,9 @@ if archivo is not None:
         with st.spinner("🧠 THE TEACHER está trabajando..."):
             try:
                 texto_base = leer_pdf(archivo)
-                model = genai.GenerativeModel('gemini-1.5-flash-latest')
+                # Esto busca automáticamente el modelo que funcione en tu cuenta
+                model_name = next( m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods)
+                model = genai.GenerativeModel(model_name)
 
                 if "Resumen" in modo:
                     instrucciones = "Haz un resumen detallado, limpio y fácil de leer. Usa negritas y puntos de lista. Al final añade 5 preguntas de examen con respuestas."

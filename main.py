@@ -62,24 +62,26 @@ archivo = st.file_uploader("", type="pdf")
 
 if archivo is not None:
     if st.button(f"🚀 GENERAR {modo.upper()}"):
-        with st.spinner("👨‍🏫 THE TEACHER está trabajando..."):
+        with st.spinner("🧠 THE TEACHER está trabajando..."):
             try:
                 texto_base = leer_pdf(archivo)
-                modelos = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-                model = genai.GenerativeModel(modelos[0])
+                model = genai.GenerativeModel('gemini-pro')
 
-                # --- LÓGICA DE PROMPT MEJORADA ---
-            if "Resumen" in modo:
-                instrucciones = "Haz un resumen detallado, limpio y fácil de leer. Usa negritas y puntos de lista. Al final añade 5 preguntas de examen con respuestas."
-            elif "Esquema" in modo:
-                instrucciones = "Crea un esquema jerárquico visualmente claro usando puntos de lista y sangrías. Evita códigos raros o flechas complejas. Que sea ideal para estudiar de un vistazo."
+                if "Resumen" in modo:
+                    instrucciones = "Haz un resumen detallado, limpio y fácil de leer. Usa negritas y puntos de lista. Al final añade 5 preguntas de examen con respuestas."
+                elif "Esquema" in modo:
+                    instrucciones = "Crea un esquema jerárquico visualmente claro usando puntos de lista y sangrías. Evita códigos raros. Que sea ideal para estudiar de un vistazo."
                 else:
-                    instrucciones = f"Traduce fielmente estos apuntes al idioma {idioma} manteniendo el rigor académico."
+                    instrucciones = "Traduce fielmente estos apuntes al idioma seleccionado manteniendo el rigor académico."
 
                 prompt = f"Eres THE TEACHER. {instrucciones}. Aquí están los apuntes: {texto_base[:12000]}"
 
                 response = model.generate_content(prompt)
                 resultado = response.text
+
+            except Exception as e:
+                st.error(f"Hubo un error: {e}")
+                resultado = None
 
                 # --- VISUALIZACIÓN DIRECTA (Sin clics extra) ---
                 st.success("✅ ¡Trabajo terminado!")

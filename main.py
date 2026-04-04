@@ -65,7 +65,7 @@ if archivo is not None:
         with st.spinner("🧠 THE TEACHER está trabajando..."):
             try:
                 texto_base = leer_pdf(archivo)
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
                 if "Resumen" in modo:
                     instrucciones = "Haz un resumen detallado, limpio y fácil de leer. Usa negritas y puntos de lista. Al final añade 5 preguntas de examen con respuestas."

@@ -69,10 +69,10 @@ if archivo is not None:
                 model = genai.GenerativeModel(modelos[0])
 
                 # --- LÓGICA DE PROMPT MEJORADA ---
-                if "Resumen" in modo:
-                    instrucciones = "Haz un resumen detallado y añade al final 5 preguntas de examen con sus respuestas."
-                elif "Esquema" in modo:
-                    instrucciones = "Crea un esquema jerárquico muy visual con flechas y puntos clave. Añade 3 preguntas de autoevaluación."
+            if "Resumen" in modo:
+                instrucciones = "Haz un resumen detallado, limpio y fácil de leer. Usa negritas y puntos de lista. Al final añade 5 preguntas de examen con respuestas."
+            elif "Esquema" in modo:
+                instrucciones = "Crea un esquema jerárquico visualmente claro usando puntos de lista y sangrías. Evita códigos raros o flechas complejas. Que sea ideal para estudiar de un vistazo."
                 else:
                     instrucciones = f"Traduce fielmente estos apuntes al idioma {idioma} manteniendo el rigor académico."
 

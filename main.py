@@ -83,6 +83,19 @@ if archivo is not None:
                 response = model.generate_content(prompt)
                 resultado = response.text
 
+                # --- MOSTRAR EL RESULTADO EN LA WEB ---
+                st.markdown("### ✨ Resultado de THE TEACHER:")
+                st.markdown(resultado)
+
+                # --- PREPARAR EL PDF PARA DESCARGAR ---
+                pdf_bytes = crear_pdf(resultado, f"THE TEACHER - {modo}")
+                st.download_button(
+                    label="📥 Descargar en PDF",
+                    data=pdf_bytes,
+                    file_name=f"TheTeacher_{modo}.pdf",
+                    mime="application/pdf"
+                )
+
             except Exception as e:
                 st.error(f"Hubo un error: {e}")
                 resultado = None

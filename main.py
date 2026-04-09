@@ -67,56 +67,31 @@ if archivo is not None:
         with st.spinner("🧠 THE TEACHER está trabajando..."):
             try:
                 texto_base = leer_pdf(archivo)
-                # Esto busca automáticamente el modelo que funcione en tu cuenta
-                model_name = next( m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods)
-                model = genai.GenerativeModel(model_name)
+                model = genai.GenerativeModel('gemini-1.5-flash')
 
                 if "Resumen" in modo:
                     instrucciones = "Haz un resumen detallado, limpio y fácil de leer. Usa negritas y puntos de lista. Al final añade 5 preguntas de examen con respuestas."
                 elif "Esquema" in modo:
                     instrucciones = "Crea un esquema jerárquico visualmente claro usando puntos de lista y sangrías. Evita códigos raros. Que sea ideal para estudiar de un vistazo."
                 else:
-                    instrucciones = "Traduce fielmente estos apuntes al idioma seleccionado manteniendo el rigor académico."
+                    instrucciones = f"Traduce fielmente estos apuntes al idioma {idioma} manteniendo el rigor académico."
 
                 prompt = f"Eres THE TEACHER. {instrucciones}. Aquí están los apuntes: {texto_base[:12000]}"
 
                 response = model.generate_content(prompt)
                 resultado = response.text
 
-                # --- MOSTRAR EL RESULTADO EN LA WEB ---
+                st.success("✅ ¡Trabajo terminado!")
                 st.markdown("### ✨ Resultado de THE TEACHER:")
                 st.markdown(resultado)
 
-                # --- PREPARAR EL PDF PARA DESCARGAR ---
                 pdf_bytes = crear_pdf(resultado, f"THE TEACHER - {modo}")
                 st.download_button(
                     label="📥 Descargar en PDF",
-                    data=pdf_bytes,
-                    file_name=f"TheTeacher_{modo}.pdf",
-                    mime="application/pdf"
-                )
-
-            except Exception as e:
-                st.error(f"Hubo un error: {e}")
-                resultado = None
-
-                # --- VISUALIZACIÓN DIRECTA (Sin clics extra) ---
-                st.success("✅ ¡Trabajo terminado!")
-                st.markdown("---")
-                st.markdown(resultado)
-
-                # --- BOTÓN DE DESCARGA ---
-                pdf_bytes = crear_pdf(resultado, f"THE TEACHER - {modo}")
-                st.download_button(
-                    label="📥 DESCARGAR EN PDF",
                     data=pdf_bytes,
                     file_name=f"TheTeacher_{modo.replace(' ', '_')}.pdf",
                     mime="application/pdf"
                 )
 
             except Exception as e:
-                st.error(f"Se ha producido un error: {e}")
-
-# Pie de página profesional
-st.write("---")
-st.caption("© 2024 THE TEACHER - No guardamos tus archivos. Privacidad 100% garantizada.")
+                st.error(f"Hubo un error: {e}")
